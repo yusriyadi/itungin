@@ -2,7 +2,7 @@
 
 Web app sederhana untuk bantu hitung split bill trip, jalan-jalan, atau patungan rame-rame dalam satu file HTML.
 
-Repo: [https://github.com/yusriyadi/hitungin.git](https://github.com/yusriyadi/hitungin.git)
+Repo: [https://github.com/yusriyadi/hitungin.git](https://github.com/yusriyadi/itungin.git)
 
 ## Screenshot
 
