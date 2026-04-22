@@ -338,7 +338,7 @@
       <p>Ngebantu kamu split bill sehabis naik gunung</p>
       <div class="trip-row">
         <label class="trip-label" for="tripNameInput">Judul trip opsional</label>
-        <input id="tripNameInput" type="text" placeholder="Contoh: Papandayan Weekend, Trip Dieng, Healing Jogja" />
+        <input id="tripNameInput" type="text" placeholder="Contoh: Nanjak Sumbing-banaran, Trip Cisadon, Healing Jogja" />
         <p class="trip-hint">Kalau diisi, nama trip akan ikut muncul di rekap teks dan gambar.</p>
       </div>
     </section>
@@ -355,15 +355,22 @@
 
         <div class="card" style="margin-top:16px">
           <h3>Atau bisa Import Format Chat</h3>
-          <p class="subtle">Paste format seperti ini: <code>Yusri: simaksi 300k</code>. Satu baris untuk satu orang.</p>
-          <textarea id="formattedInput" placeholder="Yusri: simaksi 300k
-Rio: logistik 180k, tambahin simaksi 20k
-Yeni: ojek 160, makan pagi 135k, makan malem 95k
-Naswa: -"></textarea>
+          <p class="subtle">Paste format seperti ini: <code>Yusri: simaksi 300k;</code>. Akhiri tiap orang dengan <code>;</code> supaya bisa multi-line.</p>
+          <textarea id="formattedInput" placeholder="Yusri:
+simaksi 300k;
+Rio:
+logistik 180k,
+tambahin simaksi 20k;
+
+Yeni:
+ojek 160,
+makan pagi 135k,
+makan malem 95k;
+Naswa: -;"></textarea>
           <div class="form-row" style="margin-top:12px">
             <button id="loadFormattedBtn" class="ghost">Load template</button>
             <button id="applyFormattedBtn" class="ghost">Proses</button>
-            <button id="clearFormattedBtn" class="ghost">Kosongkan Formatted</button>
+            <button id="clearFormattedBtn" class="ghost">Kosongkan template</button>
           </div>
         </div>
 
@@ -420,10 +427,17 @@ Naswa: -"></textarea>
 
   <script>
     const people = [];
-    const formattedSample = `yusri : simaksi 300000
-rio : logistik 180k, tambahin simaksi 20k
-yeni : ojek 160, makan pagi 135k, makan malem 95k
-naswa : -`;
+    const formattedSample = `yusri :
+simaksi 300000;
+rio :
+logistik 180k,
+tambahin simaksi 20k;
+
+yeni :
+ojek 160,
+makan pagi 135k,
+makan malem 95k;
+naswa : -;`;
 
     const personNameInput = document.getElementById("personNameInput");
     const tripNameInput = document.getElementById("tripNameInput");
@@ -504,7 +518,8 @@ naswa : -`;
     }
 
     function parseFormattedLine(line) {
-      const [rawName, ...rest] = line.split(":");
+      const normalizedLine = line.replace(/;\s*$/g, "").trim();
+      const [rawName, ...rest] = normalizedLine.split(":");
       if (!rawName || rest.length === 0) return null;
 
       const name = rawName.trim();
@@ -549,8 +564,8 @@ naswa : -`;
 
     function applyFormattedInput() {
       const lines = formattedInput.value
-        .split("\n")
-        .map((line) => line.trim())
+        .split(";")
+        .map((line) => line.replace(/\s*\n\s*/g, " ").trim())
         .filter(Boolean);
 
       people.splice(0, people.length);

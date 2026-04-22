@@ -151,15 +151,17 @@ object SplitBillCalculator {
 
     fun parseFormattedInput(raw: String): List<PersonInput> {
         return raw
-            .lineSequence()
-            .map { it.trim() }
+            .split(";")
+            .asSequence()
+            .map { it.replace(Regex("""\s*\n\s*"""), " ").trim() }
             .filter { it.isNotEmpty() }
             .mapNotNull(::parseFormattedLine)
             .toList()
     }
 
     fun parseFormattedLine(line: String): PersonInput? {
-        val parts = line.split(":", limit = 2)
+        val sanitizedLine = line.replace(Regex(""";\s*$"""), "").trim()
+        val parts = sanitizedLine.split(":", limit = 2)
         if (parts.size < 2) return null
 
         val name = parts[0].trim()
